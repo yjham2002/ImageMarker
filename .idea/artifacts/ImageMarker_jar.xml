@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="ImageMarker:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/ImageMarker_jar</output-path>
+    <root id="archive" name="ImageMarker.jar">
+      <element id="module-output" name="ImageMarker" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/net/coobird/thumbnailator/0.4.8/thumbnailator-0.4.8.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
