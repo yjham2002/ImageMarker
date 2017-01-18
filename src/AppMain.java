@@ -30,7 +30,7 @@ public class AppMain {
                 .setAsIntrinsicWaterMark()
                 .outputFormat("png")
                 .alphaOfCaption(0.5f)
-                .subTopMargin(10)
+                .subTopMargin(-20)
                 .position(ImageMarker.CENTER)
                 .captionColor(Color.WHITE);
 

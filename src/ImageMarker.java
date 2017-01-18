@@ -256,8 +256,8 @@ public class ImageMarker {
             BufferedImage toMark = Thumbnails
                     .of(originalImage)
                     .watermark(toApply, alpha)
+                    .outputQuality(1.0f)
                     .size(originalImage.getWidth(), originalImage.getHeight())
-                    .outputFormat(outputFormat)
                     .asBufferedImage();
 
             Caption filter = new Caption(captionText, font, captionColor, captionAlpha, position, insetPixels);
@@ -268,6 +268,7 @@ public class ImageMarker {
                     .of(ret)
                     .watermark(tempCaption)
                     .size(originalImage.getWidth(), originalImage.getHeight())
+                    .outputQuality(1.0f)
                     .outputFormat(outputFormat)
                     .asBufferedImage();
 
