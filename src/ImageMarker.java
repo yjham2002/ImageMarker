@@ -33,10 +33,14 @@ public class ImageMarker {
 
     private static int positionCode = 0;
 
+    private static int subTopMargin = 0;
+
     private static float alpha = 0.5f;
     private static float captionAlpha = 1.0f;
 
+    private static String outputFormat = "png";
     private static String captionText = "";
+    private static String subCaptionText = "";
 
     private static BufferedImage originalImage = null;
     private static BufferedImage waterImage = null;
@@ -45,7 +49,8 @@ public class ImageMarker {
     private int intrinsicWidth = 0;
     private int intrinsicHeight = 0;
 
-    private static Font font = new Font("Gulim", Font.PLAIN, 14);
+    private static Font font = new Font("Gulim", Font.PLAIN, 50);
+    private static Font subFont = new Font("Gulim", Font.PLAIN, 20);
     private static Color captionColor = Color.black;
     private static Position position = Positions.CENTER;
     private static int insetPixels = 0;
@@ -114,6 +119,16 @@ public class ImageMarker {
     }
 
     /**
+     * Function for setting a top margin of sub text
+     * @param m : Margin value as the pixel unit
+     * */
+    public ImageMarker subTopMargin(int m){
+        this.subTopMargin = m;
+        this.setPos();
+        return instance;
+    }
+
+    /**
      * Function for setting color of caption
      * @param c : Color type value
      * */
@@ -128,6 +143,15 @@ public class ImageMarker {
      * */
     public ImageMarker caption(String caption){
         this.captionText = caption;
+        return instance;
+    }
+
+    /**
+     * Function for setting sub caption String
+     * @param caption : String type contents for caption
+     * */
+    public ImageMarker subCaption(String caption){
+        this.subCaptionText = caption;
         return instance;
     }
 
@@ -188,6 +212,15 @@ public class ImageMarker {
     }
 
     /**
+     * Function for setting sub font of caption
+     * @param f : font type
+     * */
+    public ImageMarker subFont(Font f){
+        this.subFont = f;
+        return instance;
+    }
+
+    /**
      * Function for setting alpha of watermark image
      * @param f : float type 0.0f ~ 1.0f alpha value
      * */
@@ -206,6 +239,15 @@ public class ImageMarker {
     }
 
     /**
+     * Function for setting output format
+     * @param o : output format
+     * */
+    public ImageMarker outputFormat(String o){
+        this.outputFormat = o;
+        return instance;
+    }
+
+    /**
      * Function for getting bufferedImage as a result
      * */
     public BufferedImage toBufferedImage(){
@@ -215,10 +257,20 @@ public class ImageMarker {
                     .of(originalImage)
                     .watermark(toApply, alpha)
                     .size(originalImage.getWidth(), originalImage.getHeight())
+                    .outputFormat(outputFormat)
                     .asBufferedImage();
 
             Caption filter = new Caption(captionText, font, captionColor, captionAlpha, position, insetPixels);
+            Caption subFilter = new Caption(" \n" + subCaptionText, subFont, captionColor, captionAlpha, Positions.BOTTOM_CENTER, insetPixels);
             ret = filter.apply(toMark);
+            BufferedImage tempCaption = subFilter.apply(new BufferedImage(ret.getWidth(), font.getSize() * 2 + subTopMargin, BufferedImage.TYPE_INT_ARGB));
+            ret = Thumbnails
+                    .of(ret)
+                    .watermark(tempCaption)
+                    .size(originalImage.getWidth(), originalImage.getHeight())
+                    .outputFormat(outputFormat)
+                    .asBufferedImage();
+
         }catch(IOException e) {
             e.printStackTrace();
         }
